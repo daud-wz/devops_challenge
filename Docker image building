@@ -1,0 +1,21 @@
+#NOTE: I wrote the docker image, however at the time of building the image, I constantly received error with Docker daemon not able to connect. 
+#Tried installing and re-installing docker few times, but to not avail. I have shared by Dockerfile configuration below:
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Get the base image:
+FROM ubuntu:18.04
+
+#Install docker to the base image of Ubuntu 18.04
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install -y python3
+RUN apt install python3-pip
+
+#Install Python requirements from requirements.txt file:
+RUN pip install -r requirements.txt
+
+#Deploy Python flask:
+WORKDIR /opt/webapp
+RUN pip install flask
+EXPOSE 5000
+CMD ["python", "/opt/webapp"]
