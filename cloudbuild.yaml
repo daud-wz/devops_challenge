@@ -1,0 +1,33 @@
+#NOTE:I have to learn more about CI/CD and its best practices. Please, consider this incomplete.
+
+#Validating Terraform code:
+
+steps:
+- id: 'tf plan'
+  name: 'hashicorp/terraform:1.2.2'
+i  entrypoint: 'sh'
+  args:
+  - '-c'
+  - |
+      echo "instance_name $INSTANCE_NAME
+      if [ ! -z "$INSTANCE_NAME" -a -d "daud-wz/devops_challenge/" ]; then
+        cd daud-wz/devops_challenge
+        echo "run init"
+        terraform init
+        echo "run validate"
+        terraform validate
+        echo "run plan"
+        terraform plan -out terraform.plan
+        terraform apply -auto-approve terraform.plan
+      else
+        for dir in daud-wz/devops_challenge
+        do
+          cd ${dir}
+          env=${dir%*/}
+          env=${env#*/}
+          terraform init
+          terraform validate
+          terraform plan || exit 1
+          cd ../../
+        done
+      fi
