@@ -1,0 +1,7 @@
+#!/bin/bash
+#For backup of data
+DATE=$(date +"%Y-%b-%d")
+cd var
+tar -zcvf $DATE.tgz www
+mkdir /lib/backups
+mv *.tgz /var/lib/backups
